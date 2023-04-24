@@ -56,7 +56,7 @@ class Window(tk.Tk):
 
         Initializes an instance of the AppChoice class and stores it in the app attribute of the Window object.
         """
-        self.app = AppChoice(self)
+        self.app = AppChoice(master = self)
 
     def create_exit_button(self):
         """
@@ -85,25 +85,25 @@ class AppChoice(ttk.Labelframe):
     A class representing the app choice label frame.
 
     Attributes:
-        parent (tk.Tk): The parent window.
+        master (tk.Tk): The master window.
     
     Methods:
         create_widget() : Creates the widgets for the AppChoice object.
         create_new_button() : Creates the 'Creer un compte' button and assigns its command.
         create_get_button() : Creates the 'Afficher un compte' button and assigns its command.
-        place_labelframe() : Places the AppChoice object in the parent window.
+        place_labelframe() : Places the AppChoice object in the master window.
         create_account() : Forgets the current frame and launches the AccountCreator object.
         get_account() : Forgets the current frame and launches the AccountFinder object.
     """
 
-    def __init__(self, parent: tk.Tk):
+    def __init__(self, master: tk.Tk):
         """
         Initializes the AppChoice object.
 
         Args:
-            parent (tk.Tk): The parent window.
+            master (tk.Tk): The master window.
         """
-        super().__init__(parent, text="Choix de l'application")
+        super().__init__(master, text="Choix de l'application")
         self.create_widget()
         self.place_labelframe()
 
@@ -112,13 +112,14 @@ class AppChoice(ttk.Labelframe):
         Creates the widgets for the AppChoice object.
         """
         self.create_new_button()
+        self.create_get_button()
 
     def create_new_button(self):
         """
         Creates the 'Creer un compte' button and assigns its command.
         """
         self.create_button = ttk.Button(self, text="Creer un compte")
-        self.create_button.configure(command=lambda: self.create_account())
+        self.create_button.configure(command = lambda : self.changer_label_frame(AccountCreator))
         self.create_button.pack(padx=20, pady=(20, 5))
 
     def create_get_button(self):
@@ -126,35 +127,40 @@ class AppChoice(ttk.Labelframe):
         Creates the 'Afficher un compte' button and assigns its command.
         """
         self.get_button = ttk.Button(self, text="Afficher un compte")
-        self.get_button.configure(command=lambda: self.get_account())
+        self.get_button.configure(command =  lambda : self.changer_label_frame(AccountFinder))
         self.get_button.pack(padx=20, pady=(0, 20))
 
     def place_labelframe(self):
         """
-        Places the AppChoice object in the parent window.
+        Places the AppChoice object in the master window.
         """
         self.pack(padx=50, pady=10)
     
-    def create_account(self):
+    def changer_label_frame(self, new_class):
         """
-        Forgets the current frame and launches the AccountCreator object.
+        Changes the label frame to a new class.
+
+        Args:
+            new_class: The new class to be used for the label frame.
         """
-        self.pack_forget()
-        account_creator = AccountCreator()
-    
-    def get_account(self):
-        """
-        Forgets the current frame and launches the AccountFinder object.
-        """
-        self.pack_forget()
-        account_finder = AccountFinder()
+        self.destroy()
+        nouvelle_classe = new_class(self.master)
+        nouvelle_classe.pack()
+
 
 class AccountCreator(ttk.Labelframe):
 
-    def __init__(self):
-        print("ok")
+    def __init__(self,master):
+        super().__init__(master, text = "Création de compte")
+        self.label = ttk.Label(self,text = "bonjour")
+        self.label.pack()
+        self.pack()
+
 
 class AccountFinder(ttk.Labelframe):
 
-    def __init__(self):
-        print("ok")
+    def __init__(self,master):
+        super().__init__(master, text = "Affichage de compte")
+        self.label = ttk.Label(self,text = "bonjour")
+        self.label.pack()
+        self.pack()
