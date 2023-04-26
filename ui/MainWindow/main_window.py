@@ -16,8 +16,9 @@ class Window(tk.Tk):
 
     Methods:
     configure_window(): Configures the title and resizable property of the window.
-    create_app_choice(): Creates an instance of the AppChoice class.
+    set_exit_button(): Configures the text and command of the exit button.
     create_exit_button(): Creates an exit button and attaches a command to it.
+    change_app(): Changes the current application to a new one.
     start_main_loop(): Starts the main event loop of the window.
     """
     CONFIG = {
@@ -36,7 +37,7 @@ class Window(tk.Tk):
         """
         super().__init__()
         self.configure_window()
-        self.create_app_choice()
+        self.app = AppChoice(master = self)
         self.create_exit_button()
         self.start_main_loop()
 
@@ -50,26 +51,46 @@ class Window(tk.Tk):
         self.title(Window.CONFIG["title"])
         self.resizable(width=Window.CONFIG["resizable"], height=Window.CONFIG["resizable"])
 
-    def create_app_choice(self):
+    def set_button(self, button : ttk.Button, text : str, command):
         """
-        Creates an instance of the AppChoice class.
+        Configures the text and command of abutton.
 
-        Initializes an instance of the AppChoice class and stores it in the app attribute of the Window object.
+        Configures the text of a button to the specified value and attaches the given command to it.
+
+        Args:
+        - button: A reference to the ttk.Button widget to configure.
+        - text: The text to display on the button.
+        - command: A reference to the function to call when the user clicks the button.
         """
-        self.app = AppChoice(master = self)
+        button["text"] = text
+        button.configure(command = command)
 
     def create_exit_button(self):
         """
         Creates an exit button and attaches a command to it.
 
-        Initializes an instance of the ttk.Button class and sets its text to "Quitter". Then, attaches the destroy 
-        method of the Window object as the command of the button, which will close the main window of the application
-        when the button is clicked. Finally, packs the button to the left side of the window and sets padding using
-        the padx and pady arguments.
+        Initializes an exit button using the ttk.Button widget and calls the set_exit_button method to configure the
+        text and command of the button.
         """
-        self.exit_button = ttk.Button(self, text="Quitter")
-        self.exit_button.configure(command=self.destroy)
+        self.exit_button = ttk.Button(self)
+        self.set_button(self.exit_button, "Quitter", self.destroy)
         self.exit_button.pack(side="left", padx=10, pady=(0, 10))
+
+    def change_app(self, new_app, return_to, text_exit_button : str):
+        """
+        Changes the current application to a new one.
+
+        Configures the exit button with the appropriate return function and destroys the current application before 
+        creating a new one.
+
+        Args:
+        - new_app: A reference to the new application to create.
+        - return_to: A reference to the function to call when the user clicks the exit button.
+        - text_exit_button: The text of the button depending of the new app
+        """
+        self.set_button(self.exit_button, text_exit_button, lambda: return_to())
+        self.app.destroy()
+        self.app = new_app(self)
 
     def start_main_loop(self):
         """
@@ -79,6 +100,7 @@ class Window(tk.Tk):
         user input and updates the graphical interface of the application.
         """
         self.mainloop()
+
 
 class AppChoice(ttk.Labelframe):
     """
@@ -92,8 +114,8 @@ class AppChoice(ttk.Labelframe):
         create_new_button() : Creates the 'Creer un compte' button and assigns its command.
         create_get_button() : Creates the 'Afficher un compte' button and assigns its command.
         place_labelframe() : Places the AppChoice object in the master window.
-        create_account() : Forgets the current frame and launches the AccountCreator object.
-        get_account() : Forgets the current frame and launches the AccountFinder object.
+        switch_app() : Switches to a new application.
+        return_to_appchoice() : Returns to the AppChoice screen.
     """
 
     def __init__(self, master: tk.Tk):
@@ -119,7 +141,7 @@ class AppChoice(ttk.Labelframe):
         Creates the 'Creer un compte' button and assigns its command.
         """
         self.create_button = ttk.Button(self, text="Creer un compte")
-        self.create_button.configure(command = lambda : self.changer_label_frame(AccountCreator))
+        self.create_button.configure(command = lambda : self.switch_app(AccountCreator))
         self.create_button.pack(padx=20, pady=(20, 5))
 
     def create_get_button(self):
@@ -127,7 +149,7 @@ class AppChoice(ttk.Labelframe):
         Creates the 'Afficher un compte' button and assigns its command.
         """
         self.get_button = ttk.Button(self, text="Afficher un compte")
-        self.get_button.configure(command =  lambda : self.changer_label_frame(AccountFinder))
+        self.get_button.configure(command =  lambda : self.switch_app(AccountFinder))
         self.get_button.pack(padx=20, pady=(0, 20))
 
     def place_labelframe(self):
@@ -136,16 +158,21 @@ class AppChoice(ttk.Labelframe):
         """
         self.pack(padx=50, pady=10)
     
-    def changer_label_frame(self, new_class):
+    def switch_app(self, new_app):
         """
-        Changes the label frame to a new class.
+        Switches to a new application.
 
         Args:
-            new_class: The new class to be used for the label frame.
+            new_app: The new application to be displayed.
         """
-        self.destroy()
-        nouvelle_classe = new_class(self.master)
-        nouvelle_classe.pack()
+        self.master.change_app(new_app, self.return_to_appchoice, "Retour")
+        self.master.change_app(new_app, self.return_to_appchoice, "Retour")
+
+    def return_to_appchoice(self):
+        """
+        Returns to the AppChoice screen.
+        """
+        self.master.change_app(AppChoice, self.master.destroy,"Quitter")
 
 
 class AccountCreator(ttk.Labelframe):
