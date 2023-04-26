@@ -37,7 +37,7 @@ class Window(tk.Tk):
         """
         super().__init__()
         self.configure_window()
-        self.app = AppChoice(master = self)
+        self.app = AppChoice(self)
         self.create_exit_button()
         self.start_main_loop()
 
@@ -49,7 +49,7 @@ class Window(tk.Tk):
         repository and to disable resizing of the window.
         """
         self.title(Window.CONFIG["title"])
-        self.resizable(width=Window.CONFIG["resizable"], height=Window.CONFIG["resizable"])
+        self.resizable(width = Window.CONFIG["resizable"], height = Window.CONFIG["resizable"])
 
     def set_button(self, button : ttk.Button, text : str, command):
         """
