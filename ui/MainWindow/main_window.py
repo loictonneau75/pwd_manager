@@ -16,6 +16,7 @@ class Window(tk.Tk):
 
     Methods:
     configure_window(): Configures the title and resizable property of the window.
+    configure_frame(): Configures the layout of the window frame.
     set_exit_button(): Configures the text and command of the exit button.
     create_exit_button(): Creates an exit button and attaches a command to it.
     change_app(): Changes the current application to a new one.
@@ -37,7 +38,8 @@ class Window(tk.Tk):
         """
         super().__init__()
         self.configure_window()
-        self.app = AppChoice(self)
+        self.configure_frame()
+        self.app = AppChoice(self.main_label)
         self.create_exit_button()
         self.start_main_loop()
 
@@ -51,7 +53,18 @@ class Window(tk.Tk):
         self.title(Window.CONFIG["title"])
         self.resizable(width = Window.CONFIG["resizable"], height = Window.CONFIG["resizable"])
 
-    def set_button(self, button : ttk.Button, text : str, command):
+    def configure_frame(self):
+        """
+        Configures the layout of the window frame.
+
+        Creates and packs the main label and back button frames in the window.
+        """
+        self.main_label = ttk.Frame(self)
+        self.back_button_frame = ttk.Frame(self)
+        self.main_label.pack(side = "top", fill = "both", expand = True, padx = 50, pady = 10)
+        self.back_button_frame.pack(side = "bottom", fill = "x", padx = 10, pady = (0, 10))
+
+    def set_button(self, button: ttk.Button, text: str, command: function):
         """
         Configures the text and command of abutton.
 
@@ -72,11 +85,11 @@ class Window(tk.Tk):
         Initializes an exit button using the ttk.Button widget and calls the set_exit_button method to configure the
         text and command of the button.
         """
-        self.exit_button = ttk.Button(self)
+        self.exit_button = ttk.Button(self.back_button_frame)
         self.set_button(self.exit_button, "Quitter", self.destroy)
-        self.exit_button.pack(side="left", padx=10, pady=(0, 10))
+        self.exit_button.pack(side = "left")
 
-    def change_app(self, new_app, return_to, text_exit_button : str):
+    def change_app(self, new_app, return_to, text_exit_button: str):
         """
         Changes the current application to a new one.
 
@@ -90,7 +103,7 @@ class Window(tk.Tk):
         """
         self.set_button(self.exit_button, text_exit_button, lambda: return_to())
         self.app.destroy()
-        self.app = new_app(self)
+        self.app = new_app(self.main_label)
 
     def start_main_loop(self):
         """
@@ -113,7 +126,6 @@ class AppChoice(ttk.Labelframe):
         create_widget() : Creates the widgets for the AppChoice object.
         create_new_button() : Creates the 'Creer un compte' button and assigns its command.
         create_get_button() : Creates the 'Afficher un compte' button and assigns its command.
-        place_labelframe() : Places the AppChoice object in the master window.
         switch_app() : Switches to a new application.
         return_to_appchoice() : Returns to the AppChoice screen.
     """
@@ -127,7 +139,7 @@ class AppChoice(ttk.Labelframe):
         """
         super().__init__(master, text="Choix de l'application")
         self.create_widget()
-        self.place_labelframe()
+        self.pack()
 
     def create_widget(self):
         """
@@ -152,12 +164,6 @@ class AppChoice(ttk.Labelframe):
         self.get_button.configure(command =  lambda : self.switch_app(AccountFinder))
         self.get_button.pack(padx=20, pady=(0, 20))
 
-    def place_labelframe(self):
-        """
-        Places the AppChoice object in the master window.
-        """
-        self.pack(padx=50, pady=10)
-    
     def switch_app(self, new_app):
         """
         Switches to a new application.
@@ -165,14 +171,14 @@ class AppChoice(ttk.Labelframe):
         Args:
             new_app: The new application to be displayed.
         """
-        self.master.change_app(new_app, self.return_to_appchoice, "Retour")
-        self.master.change_app(new_app, self.return_to_appchoice, "Retour")
+        self.master.master.change_app(new_app, self.return_to_appchoice, "Retour")
+        self.master.master.change_app(new_app, self.return_to_appchoice, "Retour")
 
     def return_to_appchoice(self):
         """
         Returns to the AppChoice screen.
         """
-        self.master.change_app(AppChoice, self.master.destroy,"Quitter")
+        self.master.master.change_app(AppChoice, self.master.master.destroy,"Quitter")
 
 
 class AccountCreator(ttk.Labelframe):
