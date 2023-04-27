@@ -1,7 +1,7 @@
 import os
 from cryptography.fernet import Fernet
 from constant import *
-from ui.MainWindow import main_window
+from ui.main_window.main_window import Window
 
 
 def create_repo():
@@ -52,7 +52,7 @@ def main():
     # Generate a new key and save it to a file if necessary
     create_key()
     # Create a new instance of the main_window.Window
-    main_window.Window()
+    Window()
 
 
 if __name__ == "__main__":
