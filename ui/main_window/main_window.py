@@ -2,8 +2,8 @@ from typing import *
 import tkinter as tk
 from tkinter import ttk
 from constant import *
-from account_creator.account_creator import AccountCreator
-from account_finder.account_finder import AccountFinder
+from ui.account_creator.account_creator import AccountCreator
+from ui.account_finder.account_finder import AccountFinder
 
 class Window(tk.Tk):
     """
@@ -13,9 +13,6 @@ class Window(tk.Tk):
     and contains methods to configure the window, create an instance of the AppChoice class, create an exit button,
     and start the main event loop of the window.
 
-    Attributes:
-    CONFIG (dict): A dictionary containing configuration options for the Window class.
-
     Methods:
     configure_window(): Configures the title and resizable property of the window.
     configure_frame(): Configures the layout of the window frame.
@@ -24,10 +21,6 @@ class Window(tk.Tk):
     change_app(): Changes the current application to a new one.
     start_main_loop(): Starts the main event loop of the window.
     """
-    CONFIG = {
-        "title": REPO_NAME,
-        "resizable": False,
-    }
 
     def __init__(self):
         """
@@ -52,8 +45,8 @@ class Window(tk.Tk):
         Uses the configuration options from the CONFIG dictionary to set the title of the window to the name of the
         repository and to disable resizing of the window.
         """
-        self.title(Window.CONFIG["title"])
-        self.resizable(width = Window.CONFIG["resizable"], height = Window.CONFIG["resizable"])
+        self.title(REPO_NAME)
+        self.resizable(width = RESIZABLE, height = RESIZABLE)
 
     def configure_frame(self):
         """
