@@ -39,7 +39,7 @@ class Window(tk.Tk):
         super().__init__()
         self.configure_window()
         self.configure_frame()
-        self.app = AppChoice(self.main_label)
+        self.change_app(AppChoice)
         self.create_exit_button()
         self.start_main_loop()
 
@@ -64,7 +64,7 @@ class Window(tk.Tk):
         self.main_label.pack(side = "top", fill = "both", expand = True, padx = 50, pady = 10)
         self.back_button_frame.pack(side = "bottom", fill = "x", padx = 10, pady = (0, 10))
 
-    def set_button(self, button: ttk.Button, text: str, command: function):
+    def set_button(self, button: ttk.Button, text: str, command):
         """
         Configures the text and command of abutton.
 
@@ -89,7 +89,7 @@ class Window(tk.Tk):
         self.set_button(self.exit_button, "Quitter", self.destroy)
         self.exit_button.pack(side = "left")
 
-    def change_app(self, new_app, return_to, text_exit_button: str):
+    def change_app(self, new_app, text_exit_button: str = "", command = None):
         """
         Changes the current application to a new one.
 
@@ -98,11 +98,17 @@ class Window(tk.Tk):
 
         Args:
         - new_app: A reference to the new application to create.
-        - return_to: A reference to the function to call when the user clicks the exit button.
+        - command: A reference to the function to call when the user clicks the exit button.
         - text_exit_button: The text of the button depending of the new app
         """
-        self.set_button(self.exit_button, text_exit_button, lambda: return_to())
-        self.app.destroy()
+        if command != None:
+
+            #TODO: a retiré en fin de projet
+            if text_exit_button == "":
+                raise AttributeError
+            
+            self.set_button(self.exit_button, text_exit_button, lambda: command())
+            self.app.destroy()
         self.app = new_app(self.main_label)
 
     def start_main_loop(self):
@@ -171,14 +177,14 @@ class AppChoice(ttk.Labelframe):
         Args:
             new_app: The new application to be displayed.
         """
-        self.master.master.change_app(new_app, self.return_to_appchoice, "Retour")
-        self.master.master.change_app(new_app, self.return_to_appchoice, "Retour")
+        self.master.master.change_app(new_app, text_exit_button = "Quitter", command = self.return_to_appchoice)
+        self.master.master.change_app(new_app, text_exit_button = "Retour", command = self.return_to_appchoice)
 
     def return_to_appchoice(self):
         """
         Returns to the AppChoice screen.
         """
-        self.master.master.change_app(AppChoice, self.master.master.destroy,"Quitter")
+        self.master.master.change_app(AppChoice, text_exit_button = "Quitter", command = self.master.master.destroy)
 
 
 class AccountCreator(ttk.Labelframe):
