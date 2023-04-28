@@ -96,8 +96,8 @@ class Window(tk.Tk):
 
         Args:
         - new_app: A reference to the new application to create.
-        - command: A reference to the function to call when the user clicks the exit button.
-        - text_exit_button: The text of the button depending of the new app
+        - exit_button_command: A reference to the function to call when the user clicks the exit button.
+        - exit_button_text: The text of the button depending of the new app
         """
         if exit_button_command != None:
 
