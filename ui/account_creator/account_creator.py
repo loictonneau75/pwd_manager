@@ -17,36 +17,31 @@ class Company(ttk.Frame):
 
     def __init__(self, master):
         super().__init__(master)
-        ttk.Label(self,background = "red").pack(expand = True, fill = "both")
-
-        #self.create_widget()
+        self.create_widget()
         self.pack(fill = "x", expand = True)
 
     def  create_widget(self):
-        ttk.Label(self,background = "red").grid(row = 0, column = 0, sticky = "nswe")
-        ttk.Label(self,background = "pink").grid(row = 0, column = 1, sticky = "nswe")
-        # self.create_label()
-        # self.create_entry()
-        # self.create_error()
+        self.create_label("Nom de la compagnie")
+        self.create_entry()
+        self.create_error("Veuillez mettre le nom de la compagnie pour laquelle vous enregistrez un compte",1)
         
-    def create_label(self):
-        self.label = ttk.Label(self, text = "Nom de la compagnie")
+    def create_label(self,text):
+        self.label = ttk.Label(self, text = text)
         self.label.grid(row = 0, column = 0)
 
     def create_entry(self):
         self.entry = ttk.Entry(self)
-        self.entry.grid(row = 0, column = 1)
+        self.entry.grid(row = 0, column = 1, sticky = "ew")
 
-    def create_error(self):
-        self.error_no_label = ttk.Label(self, text = "Veuillez mettre le nom de la compagnie \n pour laquelle vous enregistrez un compte", foreground = "red", background="blue")
-        self.error_no_label.grid(row = 1, column = 0, columnspan = 2)
+    def create_error(self, text, row):
+        self.error_label = ttk.Label(self, text = text, foreground = "red")
+        self.error_label.grid(row = row, column = 0, columnspan = 2)
 
 
 class Email(ttk.Frame):
 
     def __init__(self, master):
         super().__init__(master)
-        ttk.Label(self,background = "pink").pack(expand = True, fill = "both")
         self.pack(fill="x")
 
 
