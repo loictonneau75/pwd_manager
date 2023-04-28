@@ -87,7 +87,7 @@ class Window(tk.Tk):
         self.set_button(self.exit_button, "Quitter", self.destroy)
         self.exit_button.pack(side = "left")
 
-    def change_app(self, new_app, text_exit_button: str = "", command = None):
+    def change_app(self, new_app, exit_button_text: str = "", exit_button_command = None):
         """
         Changes the current application to a new one.
 
@@ -99,13 +99,13 @@ class Window(tk.Tk):
         - command: A reference to the function to call when the user clicks the exit button.
         - text_exit_button: The text of the button depending of the new app
         """
-        if command != None:
+        if exit_button_command != None:
 
             #TODO: a retiré en fin de projet
-            if text_exit_button == "":
+            if exit_button_text == "":
                 raise AttributeError
             
-            self.set_button(self.exit_button, text_exit_button, lambda: command())
+            self.set_button(self.exit_button, exit_button_text, lambda: exit_button_command())
             self.app.destroy()
         self.app = new_app(self.main_label)
 

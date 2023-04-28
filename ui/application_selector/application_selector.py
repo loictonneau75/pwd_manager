@@ -52,17 +52,22 @@ class AppChoice(ttk.Labelframe):
         self.get_button.configure(command =  lambda : self.switch_app(AccountFinder))
         self.get_button.pack(padx=20, pady=(0, 20))
 
-    def switch_app(self, new_app):
+    def switch_app(self, next_application = None):
         """
         Switches to a new application.
 
         Args:
-            new_app: The new application to be displayed.
+            next_application: The next application to be displayed.
         """
-        self.master.master.change_app(new_app, text_exit_button = "Retour", command = self.return_to_appchoice)
-
-    def return_to_appchoice(self):
-        """
-        Returns to the AppChoice screen.
-        """
-        self.master.master.change_app(AppChoice, text_exit_button = "Quitter", command = self.master.master.destroy)
+        if next_application:
+            self.master.master.change_app(
+                next_application,
+                exit_button_text="Retour",
+                exit_button_command=self.switch_app
+            )
+        else:
+            self.master.master.change_app(
+                AppChoice,
+                exit_button_text="Quitter",
+                exit_button_command=self.master.master.destroy
+            )
