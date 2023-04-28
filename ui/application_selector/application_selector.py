@@ -59,15 +59,16 @@ class AppChoice(ttk.Labelframe):
         Args:
             next_application: The next application to be displayed.
         """
+        main_window = self.master.master
         if next_application:
-            self.master.master.change_app(
+            main_window.change_app(
                 next_application,
                 exit_button_text="Retour",
                 exit_button_command=self.switch_app
             )
         else:
-            self.master.master.change_app(
+            main_window.change_app(
                 AppChoice,
                 exit_button_text="Quitter",
-                exit_button_command=self.master.master.destroy
+                exit_button_command=main_window.destroy
             )
