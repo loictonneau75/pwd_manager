@@ -39,6 +39,7 @@ class AccountCreator(ttk.Labelframe):
     def config_entries(self):
         self.company.value.trace("w", self.company.check_company_input())
         self.company.entry.bind("<FocusOut>", self.company.check_company_input())
+        self.email.value.trace("w", self.email.check_email_input())
 
 
 class Company():
@@ -75,6 +76,11 @@ class Email():
         self.entry = create_entry(master, self.value, (self.start_row, 1))
         self.error_no_email = create_error(master, "Veuillez mettre l'adresse utilisé pour créer un compte", master.widgets_to_hide, (self.start_row + 1, 0))
         self.error_incorect_email = create_error(master, "Email incorrecte", master.widgets_to_hide, (self.start_row + 2, 0) )
+
+    def check_email_input(self):
+        def _check_email_input(*args):
+            clean_email(self.value)
+        return _check_email_input
 
 
 class Pseudo():

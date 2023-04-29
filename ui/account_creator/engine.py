@@ -72,3 +72,11 @@ def clean_company_name(var:tk.StringVar):
     value = var.get()
     value = tld.extract(value).domain
     return value
+
+def clean_email(var:tk.StringVar):
+    value = var.get()
+    hebergeur = tld.extract(value).domain
+    suffixe = tld.extract(value).suffix
+    if hebergeur != "" and suffixe != "":
+        value = value.replace(f"@{hebergeur}.{suffixe}","")
+        return value
