@@ -33,7 +33,7 @@ def create_label(master : ttk.Labelframe, text : str, position : tuple):
     label.grid(row = position[0], column = position[1], sticky = "ew")
     return label
 
-def create_entry(master : ttk.Labelframe, position : tuple, variable : tk.StringVar):
+def create_entry(master : ttk.Labelframe, variable : tk.StringVar, position : tuple):
     """
     Creates an entry widget with the given StringVar and adds it to the given master widget at the specified position.
 

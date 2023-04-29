@@ -53,11 +53,11 @@ class Window(tk.Tk):
 
         Creates and packs the main label and back button frames in the window.
         """
-        #TODO: rechanger en frame a la fin
-        self.main_label = ttk.Labelframe(self, text="main")
-        self.back_button_frame = ttk.Labelframe(self, text="button")
-        # self.main_label = ttk.Frame(self)
-        # self.back_button_frame = ttk.Frame(self)
+        #TODO: rechanger ou effacer en frame a la fin ( doit rester les Frames)
+        # self.main_label = ttk.Labelframe(self, text="main")
+        # self.back_button_frame = ttk.Labelframe(self, text="button")
+        self.main_label = ttk.Frame(self)
+        self.back_button_frame = ttk.Frame(self)
 
         self.main_label.pack(side = "top", fill = "both", expand = True, padx = 50, pady = 10)
         self.back_button_frame.pack(side = "bottom", fill = "x", padx = 10, pady = (0, 10))
