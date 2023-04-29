@@ -24,7 +24,7 @@ class AccountCreator(ttk.Labelframe):
         """
         self.valid_button = ttk.Button(self, text="Valider")
         self.valid_button.configure(command = lambda : print("ok"))
-        self.valid_button.grid(row = 13, column = 1)
+        self.valid_button.grid(row = 13, column = 1, sticky = "e")
 
 
 class Company():
