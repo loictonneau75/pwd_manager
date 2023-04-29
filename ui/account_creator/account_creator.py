@@ -12,7 +12,7 @@ class AccountCreator(ttk.Labelframe):
         self.widgets_to_hide = []
         self.create_widget()
         self.company.entry.focus()
-        self.hide_widgets()
+        #self.hide_widgets()
         self.config_entries()
         self.pack()
 
