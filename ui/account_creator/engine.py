@@ -1,5 +1,6 @@
 import tkinter as tk
 from tkinter import ttk
+import tldextract as tld
 
 def create_error(master : ttk.Labelframe, text : str, list : list, position : tuple):
     """
@@ -66,3 +67,8 @@ def create_checkbox(master : ttk.Labelframe, variable : tk.BooleanVar, text : st
     check_box = ttk.Checkbutton(master, text = text, command = command, variable = variable)
     check_box.grid(row = position[0], column = position[1], sticky = "ew")
     return check_box
+
+def clean_company_name(var:tk.StringVar):
+    value = var.get()
+    value = tld.extract(value).domain
+    return value

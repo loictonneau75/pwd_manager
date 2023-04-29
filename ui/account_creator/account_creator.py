@@ -1,6 +1,7 @@
 import tkinter as tk
 from tkinter import ttk
 
+
 from ui.account_creator.engine import *
 
 
@@ -34,12 +35,10 @@ class AccountCreator(ttk.Labelframe):
     def hide_widgets(self):
         for widget in self.widgets_to_hide:
             widget.grid_forget()
-        
+
     def config_entries(self):
         self.company.value.trace("w", self.company.check_company_input())
         self.company.entry.bind("<FocusOut>", self.company.check_company_input())
-
-        
 
 
 class Company():
@@ -56,8 +55,8 @@ class Company():
 
     def check_company_input(self):
         def _check_company_input(*args):
-            value = self.value.get()
-            if self.value.get() == "":
+            value = clean_company_name(self.value)
+            if value == "":
                 self.error_no_company.grid(row = self.start_row + 1, column = 0, columnspan = 2)
             else:
                 self.error_no_company.grid_forget()
@@ -91,7 +90,7 @@ class Pseudo():
         self.is_already_possessed = tk.BooleanVar()
         self.is_already_possessed_checkbox = create_checkbox(master, self.is_already_possessed, "Avez vous deja un pseudo",
                                                              lambda: print(self.is_already_possessed.get()), (self.start_row, 1))
-        self.is_already_possessed_checkbox["state"] = "disable"
+        master.widgets_to_hide.append(self.is_already_possessed_checkbox)
         self.value = tk.StringVar()
         self.label = create_label(master, "Pseudo :", (self.start_row + 1, 0))
         master.widgets_to_hide.append(self.label)
