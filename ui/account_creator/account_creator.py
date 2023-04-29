@@ -6,11 +6,11 @@ from ui.account_creator.engine import *
 
 class AccountCreator(ttk.Labelframe):
 
-    def __init__(self, master: ttk.Frame):
+    def __init__(self, master: tk.Tk):
         super().__init__(master, text = "Création de compte")
-        self.error_widgets = []
+        self.widgets_to_hide = []
         self.create_widget()
-        self.erase_error_widget()
+        self.hide_widgets()
         # self.config_entry()
         
         self.company.value.trace("w", self.company.check_company_entry_lenght())
@@ -31,9 +31,9 @@ class AccountCreator(ttk.Labelframe):
         self.valid_button.configure(command = lambda : print("ok"))
         self.valid_button.grid(row = 13, column = 1, sticky = "e")
 
-    def erase_error_widget(self):
-        print(self.error_widgets)
-        self.company.error_no_company.grid_forget()
+    def hide_widgets(self):
+        for widget in self.widgets_to_hide:
+            widget.grid_forget()
         
 
 
@@ -47,7 +47,7 @@ class Company():
         self.value = tk.StringVar()
         self.label = create_label(master, "Nom de la compagnie :", (self.start_row, 0))
         self.entry = create_entry(master, self.value, (self.start_row, 1))
-        self.error_no_company = create_error(master, "Veuillez mettre le nom de la compagnie pour laquelle vous enregistrez un compte", master.error_widgets, (self.start_row + 1, 0))
+        self.error_no_company = create_error(master, "Veuillez mettre le nom de la compagnie pour laquelle vous enregistrez un compte", master.widgets_to_hide, (self.start_row + 1, 0))
 
     def check_company_entry_lenght(self):
         def _check_company(*args):
@@ -69,8 +69,8 @@ class Email():
         self.value = tk.StringVar()
         self.label = create_label(master, "Email :", (self.start_row, 0))
         self.entry = create_entry(master, self.value, (self.start_row, 1))
-        self.error_no_email = create_error(master, "Veuillez mettre l'adresse utilisé pour créer un compte", (self.start_row + 1, 0))
-        self.error_incorect_email = create_error(master, "Email incorrecte", (self.start_row + 2, 0) )
+        self.error_no_email = create_error(master, "Veuillez mettre l'adresse utilisé pour créer un compte", master.widgets_to_hide, (self.start_row + 1, 0))
+        self.error_incorect_email = create_error(master, "Email incorrecte", master.widgets_to_hide, (self.start_row + 2, 0) )
 
 
 class Pseudo():
@@ -89,7 +89,7 @@ class Pseudo():
         self.value = tk.StringVar()
         self.label = create_label(master, "Pseudo :", (self.start_row + 1, 0))
         self.entry = create_entry(master, self.value, (self.start_row + 1, 1))
-        self.error_no_pseudo = create_error(master,"Veuillez renseigné un pseudo",(self.start_row + 2, 0))
+        self.error_no_pseudo = create_error(master,"Veuillez renseigné un pseudo", master.widgets_to_hide,(self.start_row + 2, 0))
 
 
 class Password():
@@ -105,7 +105,7 @@ class Password():
         self.value = tk.StringVar()
         self.label = create_label(master, "Mot de passe :", (self.start_row + 1, 0))
         self.entry = create_entry(master, self.value, (self.start_row + 1, 1))
-        self.error_no_pseudo = create_error(master,"Veuillez renseigné un mot de passe",(self.start_row + 2, 0))
+        self.error_no_pseudo = create_error(master,"Veuillez renseigné un mot de passe", master.widgets_to_hide,(self.start_row + 2, 0))
         self.label = create_label(master, "Répéter le mot de passe :", (self.start_row + 3, 0))
         self.entry = create_entry(master, self.value, (self.start_row + 3, 1))
-        self.error_no_pseudo = create_error(master,"Les mots de passe doivent corespondre",(self.start_row + 4, 0))
+        self.error_no_pseudo = create_error(master,"Les mots de passe doivent corespondre", master.widgets_to_hide,(self.start_row + 4, 0))
