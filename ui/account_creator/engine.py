@@ -1,7 +1,7 @@
 import tkinter as tk
 from tkinter import ttk
 
-def create_error(master : ttk.Labelframe, text : str, position : tuple):
+def create_error(master : ttk.Labelframe, text : str, list : list, position : tuple):
     """
     Creates a label with the given error message and adds it to the given master widget at the specified position.
 
@@ -9,11 +9,13 @@ def create_error(master : ttk.Labelframe, text : str, position : tuple):
         master: A ttk.Labelframe widget to which the error label will be added.
         text: A string containing the error message to be displayed on the label.
         position: A tuple representing the row and column position of the label in the grid.
+        list: list of all the error_widgets
 
     Returns:
         The ttk.Label widget that was created.
     """
     error_label = ttk.Label(master, text = text, foreground = "red")
+    list.append(error_label)
     error_label.grid(row = position[0], column = position[1], columnspan = 2, sticky = "ew")
     return error_label
 

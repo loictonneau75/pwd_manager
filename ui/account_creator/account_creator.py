@@ -8,10 +8,11 @@ class AccountCreator(ttk.Labelframe):
 
     def __init__(self, master: ttk.Frame):
         super().__init__(master, text = "Création de compte")
+        self.error_widgets = []
         self.create_widget()
-        # self.erase_error()
+        self.erase_error_widget()
         # self.config_entry()
-        self.company.error_no_company.grid_forget()
+        
         self.company.value.trace("w", self.company.check_company_entry_lenght())
         self.pack()
 
@@ -30,6 +31,11 @@ class AccountCreator(ttk.Labelframe):
         self.valid_button.configure(command = lambda : print("ok"))
         self.valid_button.grid(row = 13, column = 1, sticky = "e")
 
+    def erase_error_widget(self):
+        print(self.error_widgets)
+        self.company.error_no_company.grid_forget()
+        
+
 
 class Company():
 
@@ -41,7 +47,7 @@ class Company():
         self.value = tk.StringVar()
         self.label = create_label(master, "Nom de la compagnie :", (self.start_row, 0))
         self.entry = create_entry(master, self.value, (self.start_row, 1))
-        self.error_no_company = create_error(master, "Veuillez mettre le nom de la compagnie pour laquelle vous enregistrez un compte", (self.start_row + 1, 0))
+        self.error_no_company = create_error(master, "Veuillez mettre le nom de la compagnie pour laquelle vous enregistrez un compte", master.error_widgets, (self.start_row + 1, 0))
 
     def check_company_entry_lenght(self):
         def _check_company(*args):
