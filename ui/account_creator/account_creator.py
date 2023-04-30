@@ -180,6 +180,8 @@ class Email():
     def config_widgets(self) -> None:
         self.value.trace("w", self.check_email_input())
         self.entry.bind("<FocusOut>", self.check_email_input())
+        self.value.trace("w", self.check_email_without_host())
+        self.entry.bind("<FocusOut>", self.check_email_without_host())
 
     def check_email_input(self) -> None:
         if self.value.get() == "":
