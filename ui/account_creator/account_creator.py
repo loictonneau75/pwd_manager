@@ -174,30 +174,38 @@ class Email():
         self.label = create_label(self.master, "Email :", (self.start_row, 0))
         self.entry = create_entry(self.master, self.value, (self.start_row, 1))
         self.error_no_email = create_error(self.master, "Veuillez mettre l'adresse utilisé pour créer un compte", (self.start_row + 1, 0))
-        self.error_incorect_email = create_error(self.master, "Email incorrecte", (self.start_row + 2, 0))
-        self.master.widgets_to_hide.extend([self.error_no_email,self.error_incorect_email])
+        self.error_incorrect_email = create_error(self.master, "Email incorrecte", (self.start_row + 2, 0))
+        self.master.widgets_to_hide.extend([self.error_no_email,self.error_incorrect_email])
 
     def config_widgets(self) -> None:
-        self.value.trace("w", self.check_email_input())
-        self.entry.bind("<FocusOut>", self.check_email_input())
-        # TODO: trouver une facon d'activer le message d'erreur avec self.value.trace
-        self.entry.bind("<FocusOut>", self.check_email_format())
+        self.value.trace("w", self.handle_change)
+        self.entry.bind("<FocusOut>", self.handle_focus_out)
+        self.entry.bind("<KeyPress>", self.handle_key_press)
 
-    def check_email_input(self):
-        def _check_email_input(*args):
-            if self.value.get() == "":
-                self.error_no_email.grid(row = self.start_row + 1, column = 0, columnspan = 2)
-            else :
-                self.error_no_email.grid_forget()
-        return _check_email_input
+    def handle_change(self,*args) -> bool:
+        if self.value.get() == "":
+            self.error_no_email.grid(row = self.start_row + 1, column = 0, columnspan = 2)
+            self.error_incorrect_email.grid_forget()
+            return True
+        else:
+            self.error_no_email.grid_forget()
+            return False
 
-    def check_email_format(self):
-        def _check_email_format(*args):
-            if is_email_format_valid(self.value.get()):
-                self.error_incorect_email.grid(row = self.start_row + 2, column = 0, columnspan = 2)
-            else:
-                self.error_incorect_email.grid_forget()
-        return _check_email_format
+    def handle_focus_out(self, *args):
+            if self.handle_change():
+                return
+            self._handle_focus_out()
+
+    def _handle_focus_out(self):
+        if is_email_format_valid(self.value.get()):
+            self.error_incorrect_email.grid(row = self.start_row + 2, column = 0, columnspan = 2)
+            self.error_no_email.grid_forget()
+        else:
+            self.error_incorrect_email.grid_forget()
+
+    def handle_key_press(self, *args):
+        self.error_no_email.grid_forget()
+        self.error_incorrect_email.grid_forget()
 
 
 class Pseudo():
