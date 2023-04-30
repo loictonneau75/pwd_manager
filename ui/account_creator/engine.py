@@ -1,6 +1,7 @@
 import tkinter as tk
 from tkinter import ttk
 import tldextract as tld
+import re
 
 def create_error(master: ttk.Labelframe, text: str, position: tuple) -> ttk.Label:
     """
@@ -81,12 +82,6 @@ def clean_company_name(var: tk.StringVar) -> str:
     value = tld.extract(value).domain
     return value
 
-def clean_email(var:tk.StringVar):
-    value = var.get()
-    hebergeur = tld.extract(value).domain
-    suffixe = tld.extract(value).suffix
-    if hebergeur != "" and suffixe != "":
-        value = value.replace(f"@{hebergeur}.{suffixe}","")
-    else:
-        value = ""
-        return value
+def is_email_format_valid(email):
+    pattern = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
+    return not bool(re.match(pattern, email))

@@ -147,7 +147,7 @@ class Company():
         self.company_name.trace("w", self.check_input())
         self.entry.bind("<FocusOut>", self.check_input())
 
-    def check_input(self) -> None:
+    def check_input(self):
         """
         Checks the user's input for the company name, and displays an error message if the input is
         empty. Otherwise, removes any displayed error messages.
@@ -180,25 +180,24 @@ class Email():
     def config_widgets(self) -> None:
         self.value.trace("w", self.check_email_input())
         self.entry.bind("<FocusOut>", self.check_email_input())
-        self.value.trace("w", self.check_email_without_host())
-        self.entry.bind("<FocusOut>", self.check_email_without_host())
+        # TODO: trouver une facon d'activer le message d'erreur avec self.value.trace
+        self.entry.bind("<FocusOut>", self.check_email_format())
 
-    def check_email_input(self) -> None:
-        if self.value.get() == "":
-            self.error_no_email.grid(row = self.start_row + 1, column = 0, columnspan = 2)
-        else :
-            self.error_no_email.grid_forget()
+    def check_email_input(self):
+        def _check_email_input(*args):
+            if self.value.get() == "":
+                self.error_no_email.grid(row = self.start_row + 1, column = 0, columnspan = 2)
+            else :
+                self.error_no_email.grid_forget()
+        return _check_email_input
 
-    
-    def check_email_without_host(self) -> None:
-        value = clean_email(self.value)
-        print(value)
-        def _check_email_without_host(*args):
-            if value == "":
+    def check_email_format(self):
+        def _check_email_format(*args):
+            if is_email_format_valid(self.value.get()):
                 self.error_incorect_email.grid(row = self.start_row + 2, column = 0, columnspan = 2)
             else:
                 self.error_incorect_email.grid_forget()
-        return _check_email_without_host
+        return _check_email_format
 
 
 class Pseudo():
