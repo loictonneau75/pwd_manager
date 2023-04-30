@@ -240,7 +240,7 @@ class Pseudo():
             self.entry.grid_forget()
             self.error_no_pseudo.grid_forget()
 
-    def handle_input(self,*args):
+    def handle_input(self,*args) -> None:
         if self.value.get() == "":
             self.error_no_pseudo.grid(row = self.start_row + 2, column = 0)
         else :
@@ -249,7 +249,7 @@ class Pseudo():
     def config_widget(self) -> None:
         self.is_necessary.trace_add("write", self.handle_is_necessary)
         self.is_already_possessed.trace_add("write", self.handle_is_already_possessed)
-        self.value.trace_add("write",self.handle_input)
+        self.value.trace_add("write", self.handle_input)
         self.entry.bind("<FocusOut>", self.handle_input)
 
 
