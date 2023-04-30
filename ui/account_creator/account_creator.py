@@ -1,7 +1,5 @@
 import tkinter as tk
 from tkinter import ttk
-
-
 from ui.account_creator.engine import *
 
 
@@ -11,8 +9,7 @@ class AccountCreator(ttk.Labelframe):
         super().__init__(master, text = "Création de compte")
         self.widgets_to_hide = []
         self.create_widget()
-        self.company.entry.focus()
-        #self.hide_widgets()
+        self.hide_widgets()
         self.config_entries()
         self.pack()
 
@@ -44,15 +41,18 @@ class AccountCreator(ttk.Labelframe):
 
 class Company():
 
-    def __init__(self, master, start_row):
+    def __init__(self, master : AccountCreator, start_row):
+        self.master = master
         self.start_row = start_row
-        self.create_widget(master)
+        self.create_widget()
+        self.entry.focus()
 
-    def  create_widget(self, master):
+    def  create_widget(self):
         self.value = tk.StringVar()
-        self.label = create_label(master, "Nom de la compagnie :", (self.start_row, 0))
-        self.entry = create_entry(master, self.value, (self.start_row, 1))
-        self.error_no_company = create_error(master, "Veuillez mettre le nom de la compagnie pour laquelle vous enregistrez un compte", master.widgets_to_hide, (self.start_row + 1, 0))
+        self.label = create_label(self.master, "Nom de la compagnie :", (self.start_row, 0))
+        self.entry = create_entry(self.master, self.value, (self.start_row, 1))
+        self.error_no_company = create_error(self.master, "Veuillez mettre le nom de la compagnie pour laquelle vous enregistrez un compte", (self.start_row + 1, 0))
+        self.master.widgets_to_hide.extend([self.error_no_company])
 
     def check_company_input(self):
         def _check_company_input(*args):
@@ -66,16 +66,19 @@ class Company():
 
 class Email():
 
-    def __init__(self, master, start_row):
+    def __init__(self, master : AccountCreator, start_row):
+        self.master = master
         self.start_row = start_row
-        self.create_widget(master)
+        self.create_widget()
 
-    def  create_widget(self,master):
+    def  create_widget(self):
         self.value = tk.StringVar()
-        self.label = create_label(master, "Email :", (self.start_row, 0))
-        self.entry = create_entry(master, self.value, (self.start_row, 1))
-        self.error_no_email = create_error(master, "Veuillez mettre l'adresse utilisé pour créer un compte", master.widgets_to_hide, (self.start_row + 1, 0))
-        self.error_incorect_email = create_error(master, "Email incorrecte", master.widgets_to_hide, (self.start_row + 2, 0) )
+        self.label = create_label(self.master, "Email :", (self.start_row, 0))
+        self.entry = create_entry(self.master, self.value, (self.start_row, 1))
+        self.error_no_email = create_error(self.master, "Veuillez mettre l'adresse utilisé pour créer un compte", (self.start_row + 1, 0))
+        self.error_incorect_email = create_error(self.master, "Email incorrecte", (self.start_row + 2, 0))
+        self.master.widgets_to_hide.extend([self.error_no_email,self.error_incorect_email])
+
 
     def check_email_input(self):
         def _check_email_input(*args):
@@ -85,44 +88,41 @@ class Email():
 
 class Pseudo():
 
-    def __init__(self, master, start_row):
+    def __init__(self, master : AccountCreator, start_row):
+        self.master = master
         self.start_row = start_row
-        self.create_widget(master)
+        self.create_widget()
 
-    def  create_widget(self, master):
+    def  create_widget(self):
         self.is_necessary = tk.BooleanVar()
-        self.is_necessary_checkbox = create_checkbox(master, self.is_necessary, "Avez vous besoin d'un pseudo", 
+        self.is_necessary_checkbox = create_checkbox(self.master, self.is_necessary, "Avez vous besoin d'un pseudo", 
                                                      lambda: print(self.is_necessary.get()), (self.start_row, 0))
         self.is_already_possessed = tk.BooleanVar()
-        self.is_already_possessed_checkbox = create_checkbox(master, self.is_already_possessed, "Avez vous deja un pseudo",
+        self.is_already_possessed_checkbox = create_checkbox(self.master, self.is_already_possessed, "Avez vous deja un pseudo",
                                                              lambda: print(self.is_already_possessed.get()), (self.start_row, 1))
-        master.widgets_to_hide.append(self.is_already_possessed_checkbox)
         self.value = tk.StringVar()
-        self.label = create_label(master, "Pseudo :", (self.start_row + 1, 0))
-        master.widgets_to_hide.append(self.label)
-        self.entry = create_entry(master, self.value, (self.start_row + 1, 1))
-        master.widgets_to_hide.append(self.entry)
-        self.error_no_pseudo = create_error(master,"Veuillez renseigné un pseudo", master.widgets_to_hide,(self.start_row + 2, 0))
+        self.label = create_label(self.master, "Pseudo :", (self.start_row + 1, 0))
+        self.entry = create_entry(self.master, self.value, (self.start_row + 1, 1))
+        self.error_no_pseudo = create_error(self.master,"Veuillez renseigné un pseudo",(self.start_row + 2, 0))
+        self.master.widgets_to_hide.extend([self.is_already_possessed_checkbox,self.label,self.entry,self.error_no_pseudo])
 
 
 class Password():
 
-    def __init__(self, master, start_row):
+    def __init__(self, master : AccountCreator, start_row):
+        self.master = master
         self.start_row = start_row
-        self.create_widget(master)
+        self.create_widget()
 
-    def  create_widget(self, master):
+    def  create_widget(self):
         self.is_already_possessed = tk.BooleanVar()
-        self.is_already_possessed_checkbox = create_checkbox(master, self.is_already_possessed, "Avez vous deja un mot de passe",
+        self.is_already_possessed_checkbox = create_checkbox(self.master, self.is_already_possessed, "Avez vous deja un mot de passe",
                                                              lambda: print(self.is_already_possessed.get()), (self.start_row, 0))
         self.value = tk.StringVar()
-        self.label = create_label(master, "Mot de passe :", (self.start_row + 1, 0))
-        master.widgets_to_hide.append(self.label)
-        self.entry = create_entry(master, self.value, (self.start_row + 1, 1))
-        master.widgets_to_hide.append(self.entry)
-        self.error_no_pseudo = create_error(master,"Veuillez renseigné un mot de passe", master.widgets_to_hide,(self.start_row + 2, 0))
-        self.label_repeat = create_label(master, "Répéter le mot de passe :", (self.start_row + 3, 0))
-        master.widgets_to_hide.append(self.label_repeat)
-        self.entry_repeat = create_entry(master, self.value, (self.start_row + 3, 1))
-        master.widgets_to_hide.append(self.entry_repeat)
-        self.error_no_pseudo = create_error(master,"Les mots de passe doivent corespondre", master.widgets_to_hide,(self.start_row + 4, 0))
+        self.label = create_label(self.master, "Mot de passe :", (self.start_row + 1, 0))
+        self.entry = create_entry(self.master, self.value, (self.start_row + 1, 1))
+        self.error_no_pseudo = create_error(self.master,"Veuillez renseigné un mot de passe", (self.start_row + 2, 0))
+        self.label_match = create_label(self.master, "Répéter le mot de passe :", (self.start_row + 3, 0))
+        self.entry_match = create_entry(self.master, self.value, (self.start_row + 3, 1))
+        self.error_pseudo_match = create_error(self.master,"Les mots de passe doivent corespondre",(self.start_row + 4, 0))
+        self.master.widgets_to_hide.extend([self.label,self.entry,self.error_no_pseudo,self.label_match,self.entry_match,self.error_pseudo_match])
