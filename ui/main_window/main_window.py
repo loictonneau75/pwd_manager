@@ -87,7 +87,7 @@ class Window(tk.Tk):
         self.set_button(self.exit_button, "Quitter", self.destroy)
         self.exit_button.pack(side = "left")
 
-    def change_app(self, new_app : Type, exit_button_text : str = "", exit_button_command = None) -> None:
+    def change_app(self, new_app: Type, exit_button_text: str = "", exit_button_command = None) -> None:
         """
         Changes the current application to a new one.
 

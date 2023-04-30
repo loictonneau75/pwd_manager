@@ -25,7 +25,6 @@ class AppChoice(ttk.Labelframe):
         Args:
             master (tk.Tk): The master window.
         """
-        print(master)
         super().__init__(master, text="Choix de l'application")
         self.create_widget()
         self.pack()
