@@ -21,7 +21,7 @@ class Window(tk.Tk):
     start_main_loop(): Starts the main event loop of the window.
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         """
         Initializes a new instance of the Window class.
 
@@ -37,7 +37,7 @@ class Window(tk.Tk):
         self.create_exit_button()
         self.start_main_loop()
 
-    def configure_window(self):
+    def configure_window(self) -> None:
         """
         Configures the title and resizable property of the window.
 
@@ -47,7 +47,7 @@ class Window(tk.Tk):
         self.title(REPO_NAME)
         self.resizable(width = RESIZABLE, height = RESIZABLE)
 
-    def configure_frame(self):
+    def configure_frame(self) -> None:
         """
         Configures the layout of the window frame.
 
@@ -62,7 +62,7 @@ class Window(tk.Tk):
         self.main_label.pack(side = "top", fill = "both", expand = True, padx = 50, pady = 10)
         self.back_button_frame.pack(side = "bottom", fill = "x", padx = 10, pady = (0, 10))
 
-    def set_button(self, button: ttk.Button, text: str, command):
+    def set_button(self, button: ttk.Button, text: str, command) -> None:
         """
         Configures the text and command of abutton.
 
@@ -76,7 +76,7 @@ class Window(tk.Tk):
         button["text"] = text
         button.configure(command = command)
 
-    def create_exit_button(self):
+    def create_exit_button(self) -> None:
         """
         Creates an exit button and attaches a command to it.
 
@@ -87,7 +87,7 @@ class Window(tk.Tk):
         self.set_button(self.exit_button, "Quitter", self.destroy)
         self.exit_button.pack(side = "left")
 
-    def change_app(self, new_app : Type, exit_button_text : str = "", exit_button_command = None):
+    def change_app(self, new_app : Type, exit_button_text : str = "", exit_button_command = None) -> None:
         """
         Changes the current application to a new one.
 
@@ -109,7 +109,7 @@ class Window(tk.Tk):
             self.app.destroy()
         self.app = new_app(self.main_label)
 
-    def start_main_loop(self):
+    def start_main_loop(self) -> None:
         """
         Starts the main event loop of the window.
 
