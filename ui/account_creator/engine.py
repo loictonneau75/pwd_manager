@@ -2,7 +2,7 @@ import tkinter as tk
 from tkinter import ttk
 import tldextract as tld
 
-def create_error(master: ttk.Labelframe, text: str, position: tuple):
+def create_error(master: ttk.Labelframe, text: str, position: tuple) -> ttk.Label:
     """
     Creates a label with the given error message and adds it to the given master widget at the specified position.
 
@@ -19,7 +19,7 @@ def create_error(master: ttk.Labelframe, text: str, position: tuple):
     error_label.grid(row = position[0], column = position[1], columnspan = 2, sticky = "ew")
     return error_label
 
-def create_label(master: ttk.Labelframe, text: str, position: tuple):
+def create_label(master: ttk.Labelframe, text: str, position: tuple) -> ttk.Label:
     """
     Creates a label with the given text and adds it to the given master widget at the specified position.
 
@@ -35,7 +35,7 @@ def create_label(master: ttk.Labelframe, text: str, position: tuple):
     label.grid(row = position[0], column = position[1], sticky = "ew")
     return label
 
-def create_entry(master : ttk.Labelframe, variable : tk.StringVar, position : tuple):
+def create_entry(master : ttk.Labelframe, variable : tk.StringVar, position : tuple) -> ttk.Entry:
     """
     Creates an entry widget with the given StringVar and adds it to the given master widget at the specified position.
 
@@ -51,7 +51,7 @@ def create_entry(master : ttk.Labelframe, variable : tk.StringVar, position : tu
     entry.grid(row = position[0], column = position[1], sticky = "ew")
     return entry
 
-def create_checkbox(master : ttk.Labelframe, variable : tk.BooleanVar, text : str, command, position : tuple):
+def create_checkbox(master : ttk.Labelframe, variable : tk.BooleanVar, text : str, command, position : tuple) -> ttk.Checkbutton:
     """
     Creates an entry widget with the given StringVar and adds it to the given master widget at the specified position.
 
