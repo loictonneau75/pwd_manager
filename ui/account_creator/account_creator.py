@@ -172,7 +172,7 @@ class Email():
         self.entry = create_entry(self.master, self.value, (self.start_row, 1))
         self.error_no_email = create_error(self.master, "Veuillez mettre l'adresse utilisé pour créer un compte", (self.start_row + 1, 0))
         self.error_incorrect_email = create_error(self.master, "Email incorrecte", (self.start_row + 2, 0))
-        self.master.widgets_to_hide.extend([self.error_no_email,self.error_incorrect_email])
+        self.master.widgets_to_hide.extend([self.error_no_email, self.error_incorrect_email])
 
     def handle_change(self,*args) -> bool:
         if self.value.get() == "":
@@ -221,13 +221,13 @@ class Pseudo():
         self.value = tk.StringVar()
         self.label = create_label(self.master, "Pseudo :", (self.start_row + 1, 0))
         self.entry = create_entry(self.master, self.value, (self.start_row + 1, 1))
-        self.error_no_pseudo = create_error(self.master,"Veuillez renseigné un pseudo",(self.start_row + 2, 0))
-        self.master.widgets_to_hide.extend([self.is_already_possessed_checkbox,self.label,self.entry,self.error_no_pseudo])
+        self.error_no_pseudo = create_error(self.master, "Veuillez renseigné un pseudo", (self.start_row + 2, 0))
+        self.master.widgets_to_hide.extend([self.is_already_possessed_checkbox, self.label, self.entry, self.error_no_pseudo])
 
     def handle_is_necessary(self, *args) -> None:
         if self.is_necessary.get():
             self.is_already_possessed_checkbox.grid(row = self.start_row, column = 1)
-        else :
+        else:
             self.is_already_possessed_checkbox.grid_forget()
             self.is_already_possessed.set(False)
 
@@ -235,7 +235,7 @@ class Pseudo():
         if self.is_already_possessed.get():
             self.label.grid(row = self.start_row + 1, column = 0)
             self.entry.grid(row = self.start_row + 1, column = 1)
-        else :
+        else:
             self.label.grid_forget()
             self.entry.grid_forget()
             self.error_no_pseudo.grid_forget()
@@ -243,7 +243,7 @@ class Pseudo():
     def handle_input(self,*args) -> None:
         if self.value.get() == "":
             self.error_no_pseudo.grid(row = self.start_row + 2, column = 0)
-        else :
+        else:
             self.error_no_pseudo.grid_forget()
 
     def config_widget(self) -> None:
@@ -259,6 +259,7 @@ class Password():
         self.master = master
         self.start_row = start_row
         self.create_widget()
+        self.config_widget()
 
     def  create_widget(self) -> None:
         self.is_already_possessed = tk.BooleanVar()
@@ -266,8 +267,43 @@ class Password():
         self.value = tk.StringVar()
         self.label = create_label(self.master, "Mot de passe :", (self.start_row + 1, 0))
         self.entry = create_entry(self.master, self.value, (self.start_row + 1, 1))
-        self.error_no_pseudo = create_error(self.master,"Veuillez renseigné un mot de passe", (self.start_row + 2, 0))
+        self.error_no_password = create_error(self.master,"Veuillez renseigné un mot de passe", (self.start_row + 2, 0))
+        self.value_match = tk.StringVar()
         self.label_match = create_label(self.master, "Répéter le mot de passe :", (self.start_row + 3, 0))
-        self.entry_match = create_entry(self.master, self.value, (self.start_row + 3, 1))
-        self.error_pseudo_match = create_error(self.master,"Les mots de passe doivent corespondre",(self.start_row + 4, 0))
-        self.master.widgets_to_hide.extend([self.label,self.entry,self.error_no_pseudo,self.label_match,self.entry_match,self.error_pseudo_match])
+        self.entry_match = create_entry(self.master, self.value_match, (self.start_row + 3, 1))
+        self.error_password_match = create_error(self.master, "Les mots de passe doivent corespondre", (self.start_row + 4, 0))
+        self.master.widgets_to_hide.extend([self.label, self.entry, self.error_no_password, self.label_match, self.entry_match, self.error_password_match])
+
+    def handle_is_already_possessed(self, *args) -> None:
+        if self.is_already_possessed.get() == True:
+            self.label.grid(row = self.start_row + 1, column = 0)
+            self.entry.grid(row = self.start_row + 1, column = 1)
+            self.label_match.grid(row = self.start_row + 3, column = 0)
+            self.entry_match.grid(row = self.start_row + 3, column = 1)
+        else:
+            self.label.grid_forget()
+            self.entry.grid_forget()
+            self.error_no_password.grid_forget()
+            self.label_match.grid_forget()
+            self.entry_match.grid_forget()
+            self.error_password_match.grid_forget()
+
+    def handle_input(self, *args) -> None:
+        if self.value.get() == "":
+            self.error_no_password.grid(row = self.start_row + 2, column = 0)
+        else:
+            self.error_no_password.grid_forget()
+    
+    def handle_match(self, *args) -> None:
+        if self.value.get() != self.value_match.get():
+            self.error_password_match.grid(row = self.start_row + 4, column = 0)
+        else:
+            self.error_password_match.grid_forget()
+
+    def config_widget(self) -> None:
+        self.entry.configure(show = "*")
+        self.entry_match.configure(show = "*")
+        self.is_already_possessed.trace_add("write",self.handle_is_already_possessed)
+        self.value.trace_add("write",self.handle_input)
+        self.entry.bind("<FocusOut>", self.handle_input)
+        self.entry_match.bind("<FocusOut>", self.handle_match)
