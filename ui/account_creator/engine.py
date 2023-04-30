@@ -17,7 +17,7 @@ def create_error(master: ttk.Labelframe, text: str, position: tuple) -> ttk.Labe
         The ttk.Label widget that was created.
     """
     error_label = ttk.Label(master, text = text, foreground = "red")
-    error_label.grid(row = position[0], column = position[1], columnspan = 2, sticky = "ew")
+    error_label.grid(row = position[0], column = position[1], columnspan = 2)
     return error_label
 
 def create_label(master: ttk.Labelframe, text: str, position: tuple) -> ttk.Label:
@@ -52,7 +52,7 @@ def create_entry(master : ttk.Labelframe, variable : tk.StringVar, position : tu
     entry.grid(row = position[0], column = position[1], sticky = "ew")
     return entry
 
-def create_checkbox(master : ttk.Labelframe, variable : tk.BooleanVar, text : str, command, position : tuple) -> ttk.Checkbutton:
+def create_checkbox(master : ttk.Labelframe, variable : tk.BooleanVar, text : str, position : tuple) -> ttk.Checkbutton:
     """
     Creates an entry widget with the given StringVar and adds it to the given master widget at the specified position.
 
@@ -64,7 +64,7 @@ def create_checkbox(master : ttk.Labelframe, variable : tk.BooleanVar, text : st
     Returns:
         The ttk.Entry widget that was created.
     """
-    check_box = ttk.Checkbutton(master, text = text, command = command, variable = variable)
+    check_box = ttk.Checkbutton(master, text = text, variable = variable)
     check_box.grid(row = position[0], column = position[1], sticky = "ew")
     return check_box
 
@@ -79,7 +79,8 @@ def clean_company_name(var: tk.StringVar) -> str:
         str: The cleaned value of the variable, containing only the domain name.
     """
     value = var.get()
-    value = tld.extract(value).domain
+    if len(value) > 3:
+        return tld.extract(value).domain
     return value
 
 def is_email_format_valid(email):

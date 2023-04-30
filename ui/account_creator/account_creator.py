@@ -133,32 +133,29 @@ class Company():
             entry: The ttk.Entry object that allows the user to input their company name.
             error_no_company: The ttk.Label object that displays an error message if the user has not entered a company name.
         """
-        self.company_name = tk.StringVar()
+        self.value = tk.StringVar()
         self.label = create_label(self.master, "Nom de la compagnie :", (self.start_row, 0))
-        self.entry = create_entry(self.master, self.company_name, (self.start_row, 1))
+        self.entry = create_entry(self.master, self.value, (self.start_row, 1))
         self.error_no_company = create_error(self.master, "Veuillez mettre le nom de la compagnie pour laquelle vous enregistrez un compte", (self.start_row + 1, 0))
         self.master.widgets_to_hide.extend([self.error_no_company])
 
+    def handle_input(self, *args):
+        """
+        Checks the user's input for the company name, and displays an error message if the input is
+        empty. Otherwise, removes any displayed error messages.
+        """
+        if clean_company_name(self.value) == "":
+            self.error_no_company.grid(row = self.start_row + 1, column = 0, columnspan = 2)
+        else:
+            self.error_no_company.grid_forget()
+    
     def config_widgets(self) -> None:
         """
         Configures the entry widget to call the check_input method when the user inputs data, and
         binds the check_input method to the "<FocusOut>" event.
         """
-        self.company_name.trace("w", self.check_input())
-        self.entry.bind("<FocusOut>", self.check_input())
-
-    def check_input(self):
-        """
-        Checks the user's input for the company name, and displays an error message if the input is
-        empty. Otherwise, removes any displayed error messages.
-        """
-        def _check_company_input(*args):
-                value = clean_company_name(self.company_name)
-                if value == "":
-                    self.error_no_company.grid(row = self.start_row + 1, column = 0, columnspan = 2)
-                else:
-                    self.error_no_company.grid_forget()
-        return _check_company_input
+        self.value.trace_add("write", self.handle_input)
+        self.entry.bind("<FocusOut>", self.handle_input)
 
 
 class Email():
@@ -177,11 +174,6 @@ class Email():
         self.error_incorrect_email = create_error(self.master, "Email incorrecte", (self.start_row + 2, 0))
         self.master.widgets_to_hide.extend([self.error_no_email,self.error_incorrect_email])
 
-    def config_widgets(self) -> None:
-        self.value.trace("w", self.handle_change)
-        self.entry.bind("<FocusOut>", self.handle_focus_out)
-        self.entry.bind("<KeyPress>", self.handle_key_press)
-
     def handle_change(self,*args) -> bool:
         if self.value.get() == "":
             self.error_no_email.grid(row = self.start_row + 1, column = 0, columnspan = 2)
@@ -191,21 +183,26 @@ class Email():
             self.error_no_email.grid_forget()
             return False
 
-    def handle_focus_out(self, *args):
+    def handle_focus_out(self, *args) -> None:
             if self.handle_change():
                 return
             self._handle_focus_out()
 
-    def _handle_focus_out(self):
+    def _handle_focus_out(self) -> None: 
         if is_email_format_valid(self.value.get()):
             self.error_incorrect_email.grid(row = self.start_row + 2, column = 0, columnspan = 2)
             self.error_no_email.grid_forget()
         else:
             self.error_incorrect_email.grid_forget()
 
-    def handle_key_press(self, *args):
+    def handle_key_press(self, *args) -> None:
         self.error_no_email.grid_forget()
         self.error_incorrect_email.grid_forget()
+
+    def config_widgets(self) -> None:
+        self.value.trace_add("write", self.handle_change)
+        self.entry.bind("<FocusOut>", self.handle_focus_out)
+        self.entry.bind("<KeyPress>", self.handle_key_press)
 
 
 class Pseudo():
@@ -214,19 +211,46 @@ class Pseudo():
         self.master = master
         self.start_row = start_row
         self.create_widget()
+        self.config_widget()
 
     def  create_widget(self) -> None:
         self.is_necessary = tk.BooleanVar()
-        self.is_necessary_checkbox = create_checkbox(self.master, self.is_necessary, "Avez vous besoin d'un pseudo", 
-                                                     lambda: print(self.is_necessary.get()), (self.start_row, 0))
+        self.is_necessary_checkbox = create_checkbox(self.master, self.is_necessary, "Avez vous besoin d'un pseudo", (self.start_row, 0))
         self.is_already_possessed = tk.BooleanVar()
-        self.is_already_possessed_checkbox = create_checkbox(self.master, self.is_already_possessed, "Avez vous deja un pseudo",
-                                                             lambda: print(self.is_already_possessed.get()), (self.start_row, 1))
+        self.is_already_possessed_checkbox = create_checkbox(self.master, self.is_already_possessed, "Avez vous deja un pseudo", (self.start_row, 1))
         self.value = tk.StringVar()
         self.label = create_label(self.master, "Pseudo :", (self.start_row + 1, 0))
         self.entry = create_entry(self.master, self.value, (self.start_row + 1, 1))
         self.error_no_pseudo = create_error(self.master,"Veuillez renseigné un pseudo",(self.start_row + 2, 0))
         self.master.widgets_to_hide.extend([self.is_already_possessed_checkbox,self.label,self.entry,self.error_no_pseudo])
+
+    def handle_is_necessary(self, *args) -> None:
+        if self.is_necessary.get():
+            self.is_already_possessed_checkbox.grid(row = self.start_row, column = 1)
+        else :
+            self.is_already_possessed_checkbox.grid_forget()
+            self.is_already_possessed.set(False)
+
+    def handle_is_already_possessed(self,*args) -> None:
+        if self.is_already_possessed.get():
+            self.label.grid(row = self.start_row + 1, column = 0)
+            self.entry.grid(row = self.start_row + 1, column = 1)
+        else :
+            self.label.grid_forget()
+            self.entry.grid_forget()
+            self.error_no_pseudo.grid_forget()
+
+    def handle_input(self,*args):
+        if self.value.get() == "":
+            self.error_no_pseudo.grid(row = self.start_row + 2, column = 0)
+        else :
+            self.error_no_pseudo.grid_forget()
+
+    def config_widget(self) -> None:
+        self.is_necessary.trace_add("write", self.handle_is_necessary)
+        self.is_already_possessed.trace_add("write", self.handle_is_already_possessed)
+        self.value.trace_add("write",self.handle_input)
+        self.entry.bind("<FocusOut>", self.handle_input)
 
 
 class Password():
@@ -238,8 +262,7 @@ class Password():
 
     def  create_widget(self) -> None:
         self.is_already_possessed = tk.BooleanVar()
-        self.is_already_possessed_checkbox = create_checkbox(self.master, self.is_already_possessed, "Avez vous deja un mot de passe",
-                                                             lambda: print(self.is_already_possessed.get()), (self.start_row, 0))
+        self.is_already_possessed_checkbox = create_checkbox(self.master, self.is_already_possessed, "Avez vous deja un mot de passe", (self.start_row, 0))
         self.value = tk.StringVar()
         self.label = create_label(self.master, "Mot de passe :", (self.start_row + 1, 0))
         self.entry = create_entry(self.master, self.value, (self.start_row + 1, 1))
