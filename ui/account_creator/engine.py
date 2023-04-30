@@ -67,7 +67,16 @@ def create_checkbox(master : ttk.Labelframe, variable : tk.BooleanVar, text : st
     check_box.grid(row = position[0], column = position[1], sticky = "ew")
     return check_box
 
-def clean_company_name(var:tk.StringVar):
+def clean_company_name(var: tk.StringVar) -> str:
+    """
+    Cleans the value of the given tk.StringVar object by extracting the domain name from it.
+    
+    Args:
+        var (tk.StringVar): The variable whose value should be cleaned.
+    
+    Returns:
+        str: The cleaned value of the variable, containing only the domain name.
+    """
     value = var.get()
     value = tld.extract(value).domain
     return value
