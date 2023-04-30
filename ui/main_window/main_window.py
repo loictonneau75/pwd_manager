@@ -108,6 +108,7 @@ class Window(tk.Tk):
             self.set_button(self.exit_button, exit_button_text, lambda: exit_button_command())
             self.app.destroy()
         self.app = new_app(self.main_frame)
+        self.bind_all("<Button-1>", lambda event: event.widget.focus_set())
 
     def start_main_loop(self) -> None:
         """
