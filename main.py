@@ -4,7 +4,7 @@ from constant import *
 from ui.main_window.main_window import Window
 
 
-def create_repo():
+def create_repo() -> None:
     """
     Creates a new directory with the name specified by the REPO_NAME constant
     if it does not already exist.
@@ -17,7 +17,7 @@ def create_repo():
         # Create new directory with the name specified by REPO_NAME constant
         os.makedirs(REPO_NAME)
 
-def create_key():
+def create_key() -> None:
     """
     Generates a new key using the Fernet encryption algorithm and saves it to
     a file with the name specified by the KEY_FILE_NAME constant if the file
@@ -34,7 +34,7 @@ def create_key():
         with open(KEY_FILE_NAME, "wb") as f:
             f.write(key)
 
-def main():
+def main() -> None:
     """
     The main function of the program that sets the current directory, creates
     a new directory and generates a new key if necessary, and creates a new
