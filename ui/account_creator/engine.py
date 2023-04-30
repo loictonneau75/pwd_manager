@@ -2,7 +2,7 @@ import tkinter as tk
 from tkinter import ttk
 import tldextract as tld
 
-def create_error(master : ttk.Labelframe, text : str, position : tuple):
+def create_error(master: ttk.Labelframe, text: str, position: tuple):
     """
     Creates a label with the given error message and adds it to the given master widget at the specified position.
 
@@ -19,7 +19,7 @@ def create_error(master : ttk.Labelframe, text : str, position : tuple):
     error_label.grid(row = position[0], column = position[1], columnspan = 2, sticky = "ew")
     return error_label
 
-def create_label(master : ttk.Labelframe, text : str, position : tuple):
+def create_label(master: ttk.Labelframe, text: str, position: tuple):
     """
     Creates a label with the given text and adds it to the given master widget at the specified position.
 
@@ -78,4 +78,6 @@ def clean_email(var:tk.StringVar):
     suffixe = tld.extract(value).suffix
     if hebergeur != "" and suffixe != "":
         value = value.replace(f"@{hebergeur}.{suffixe}","")
+    else:
+        value = ""
         return value
