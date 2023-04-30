@@ -54,12 +54,12 @@ class Window(tk.Tk):
         Creates and packs the main label and back button frames in the window.
         """
         #TODO: rechanger ou effacer en frame a la fin ( doit rester les Frames)
-        # self.main_label = ttk.Labelframe(self, text="main")
-        # self.back_button_frame = ttk.Labelframe(self, text="button")
-        self.main_label = ttk.Frame(self)
+        # self.main_frame = ttk.Labelframe(self, text = "main")
+        # self.back_button_frame = ttk.Labelframe(self, text = "button")
+        self.main_frame = ttk.Frame(self)
         self.back_button_frame = ttk.Frame(self)
 
-        self.main_label.pack(side = "top", fill = "both", expand = True, padx = 50, pady = 10)
+        self.main_frame.pack(side = "top", fill = "both", expand = True, padx = 50, pady = 10)
         self.back_button_frame.pack(side = "bottom", fill = "x", padx = 10, pady = (0, 10))
 
     def set_button(self, button: ttk.Button, text: str, command) -> None:
@@ -107,7 +107,7 @@ class Window(tk.Tk):
             
             self.set_button(self.exit_button, exit_button_text, lambda: exit_button_command())
             self.app.destroy()
-        self.app = new_app(self.main_label)
+        self.app = new_app(self.main_frame)
 
     def start_main_loop(self) -> None:
         """
