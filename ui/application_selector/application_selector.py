@@ -18,7 +18,7 @@ class AppChoice(ttk.Labelframe):
         return_to_appchoice() : Returns to the AppChoice screen.
     """
 
-    def __init__(self, master: tk.Tk):
+    def __init__(self, master: tk.Tk) -> None:
         """
         Initializes the AppChoice object.
 
@@ -29,14 +29,14 @@ class AppChoice(ttk.Labelframe):
         self.create_widget()
         self.pack()
 
-    def create_widget(self):
+    def create_widget(self) -> None:
         """
         Creates the widgets for the AppChoice object.
         """
         self.create_new_button()
         self.create_get_button()
 
-    def create_new_button(self):
+    def create_new_button(self) -> None:
         """
         Creates the 'Creer un compte' button and assigns its command.
         """
@@ -44,7 +44,7 @@ class AppChoice(ttk.Labelframe):
         self.create_button.configure(command = lambda : self.switch_app(AccountCreator))
         self.create_button.pack(padx=20, pady=(20, 5))
 
-    def create_get_button(self):
+    def create_get_button(self) -> None:
         """
         Creates the 'Afficher un compte' button and assigns its command.
         """
@@ -52,7 +52,7 @@ class AppChoice(ttk.Labelframe):
         self.get_button.configure(command =  lambda : self.switch_app(AccountFinder))
         self.get_button.pack(padx=20, pady=(0, 20))
 
-    def switch_app(self, next_application = None):
+    def switch_app(self, next_application = None) -> None:
         """
         Switches to a new application.
 
